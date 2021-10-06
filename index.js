@@ -34,10 +34,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const playerPromise = player.init();
   player.y = 202;
 
+  const loop = new Loop(context, player, background, platforms);
+
   Promise.all([backgroundPromise, ...platformPromises, playerPromise]).then(() => {
-    background.render(canvas.width, canvas.height);
-    platforms.forEach((platform) => platform.render());
-    player.render();
+    loop.render();
   });
+
+  requestAnimationFrame((timestamp) => loop.step(timestamp));
     
 });
