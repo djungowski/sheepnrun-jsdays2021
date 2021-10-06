@@ -5,10 +5,10 @@ class Player {
 
   constructor(context) {
     this.context = context;
-    this.images = {
-      [Player.idle]: { image: new Image(), steps: 4 },
-      [Player.run]: { image: new Image(), steps: 6 },
-      [Player.jump]: { image: new Image(), steps: 8 },
+    this.animations = {
+      [Player.idle]: { image: new Image(), steps: 4, updateEvery: 200 },
+      [Player.run]: { image: new Image(), steps: 6, updateEvery: 100 },
+      [Player.jump]: { image: new Image(), steps: 8, updateEvery: 100 },
     };
 
     this.currentState = Player.idle;
@@ -20,24 +20,24 @@ class Player {
     this.sourceWidth = 325;
     this.height = this.sourceHeight / 3;
     this.width = this.sourceWidth / 3;
+    this.jumpOffset = 55;
     this.lastUpdate = 0;
-    this.updateEvery = 200;
     this.currentAnimationStep = 0;
   }
 
   init() {
     return Promise.all([
       new Promise((resolve) => {
-        this.images[Player.idle].image.addEventListener('load', resolve);
-        this.images[Player.idle].image.src = 'assets/Black_Sheep_Idle.png';
+        this.animations[Player.idle].image.addEventListener('load', resolve);
+        this.animations[Player.idle].image.src = 'assets/Black_Sheep_Idle.png';
       }),
       new Promise((resolve) => {
-        this.images[Player.run].image.addEventListener('load', resolve);
-        this.images[Player.run].image.src = 'assets/Black_Sheep_Run.png';
+        this.animations[Player.run].image.addEventListener('load', resolve);
+        this.animations[Player.run].image.src = 'assets/Black_Sheep_Run.png';
       }),
       new Promise((resolve) => {
-        this.images[Player.jump].image.addEventListener('load', resolve);
-        this.images[Player.jump].image.src = 'assets/Black_Sheep_Jump.png';
+        this.animations[Player.jump].image.addEventListener('load', resolve);
+        this.animations[Player.jump].image.src = 'assets/Black_Sheep_Jump.png';
       }),
     ]);
   }
@@ -45,8 +45,7 @@ class Player {
   jump() {
     if (this.currentState === Player.run) {
       this.currentState = Player.jump;
-      this.updateEvery = 100;
-      this.y = this.y - 55;
+      this.y = this.y - this.jumpOffset;
       this.currentAnimationStep = 0;
     }
   }
@@ -55,16 +54,14 @@ class Player {
     this.currentAnimationStep = 0;
     if (isMoving) {
       this.currentState = Player.run;
-      this.updateEvery = 100;
     } else {
       this.currentState = Player.idle;
-      this.updateEvery = 200;
     }
   }
 
 
   advanceAnimationStep() {
-    const maxStep = this.images[this.currentState].steps;
+    const maxStep = this.animations[this.currentState].steps;
     this.currentAnimationStep =
       this.currentAnimationStep + 1 < maxStep
         ? this.currentAnimationStep + 1
@@ -72,7 +69,7 @@ class Player {
   }
 
   shouldUpdate(timestamp) {
-    return timestamp - this.lastUpdate >= this.updateEvery;
+    return timestamp - this.lastUpdate >= this.animations[this.currentState].updateEvery;
   }
 
   update(timestamp) {
@@ -83,14 +80,14 @@ class Player {
         this.currentAnimationStep === 0
       ) {
         this.currentState = Player.run;
-        this.y = this.y + 55;
+        this.y = this.y + this.jumpOffset;
       }
       this.lastUpdate = timestamp;
     }
   }
 
   render() {
-    const image = this.images[this.currentState];
+    const image = this.animations[this.currentState];
     const sourceStartX = this.currentAnimationStep * this.sourceWidth;
     const sourceStartY = 0;
 
