@@ -2,6 +2,7 @@ class Player {
   static idle = 'idle';
   static run = 'run';
   static jump = 'jump';
+  static dead = 'dead';
 
   constructor(context) {
     this.context = context;
@@ -9,6 +10,7 @@ class Player {
       [Player.idle]: { image: new Image(), steps: 4, updateEvery: 200 },
       [Player.run]: { image: new Image(), steps: 6, updateEvery: 100 },
       [Player.jump]: { image: new Image(), steps: 8, updateEvery: 100 },
+      [Player.dead]: { image: new Image(), steps: 1, updateEvery: 30 },
     };
 
     this.currentState = Player.idle;
@@ -23,11 +25,14 @@ class Player {
     this.jumpOffset = 55;
     this.lastUpdate = 0;
     this.currentAnimationStep = 0;    
-    this.isDead = false;
+  }
+
+  get isDead() {
+    return this.currentState === Player.dead;
   }
 
   die() {
-    this.isDead = true;
+    this.currentState = Player.dead;
   }
 
   init() {
@@ -43,6 +48,10 @@ class Player {
       new Promise((resolve) => {
         this.animations[Player.jump].image.addEventListener('load', resolve);
         this.animations[Player.jump].image.src = 'assets/Black_Sheep_Jump.png';
+      }),
+      new Promise((resolve) => {
+        this.animations[Player.dead].image.addEventListener('load', resolve);
+        this.animations[Player.dead].image.src = 'assets/Black_Sheep_Dead.png';
       }),
     ]);
   }
@@ -86,6 +95,10 @@ class Player {
       ) {
         this.currentState = Player.run;
         this.y = this.y + this.jumpOffset;
+      }
+      if (this.isDead) {
+        this.y = this.y * 1.0981;
+        this.x = this.x + 3;
       }
       this.lastUpdate = timestamp;
     }
