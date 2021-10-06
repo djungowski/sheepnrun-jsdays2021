@@ -7,9 +7,8 @@ class Background {
 
   init(source) {
     return new Promise((resolve) => {
-      this.image.src = source;
-
       this.image.addEventListener('load', resolve);
+      this.image.src = source;
     });
   }
 
