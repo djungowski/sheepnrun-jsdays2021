@@ -21,17 +21,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     new Platform(context)
   ];
 
+  
   const platformPromises = platforms
-    .map((platform, index) => {
-      platform.x = index * platform.width;
-      platform.y = 282;
-      return platform;
-    })
-    .map((platform) => platform.init());
+  .map((platform, index) => {
+    platform.x = index * platform.width;
+    platform.y = 282;
+    return platform;
+  })
+  .map((platform) => platform.init());
+  
+  const player = new Player(context);
+  const playerPromise = player.init();
+  player.y = 202;
 
-  Promise.all([backgroundPromise, ...platformPromises]).then(() => {
+  Promise.all([backgroundPromise, ...platformPromises, playerPromise]).then(() => {
     background.render(canvas.width, canvas.height);
     platforms.forEach((platform) => platform.render());
+    player.render();
   });
     
 });
