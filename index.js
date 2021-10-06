@@ -9,34 +9,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   const background = new Background(context);
   const backgroundPromise = background.init('assets/background1.png');
 
-  const platforms = [
-    new Platform(context),
-    new Gap(context),
-    new Platform(context),
-    new Platform(context),
-    new Gap(context),
-    new Platform(context),
-    new Platform(context),
-    new Gap(context),
-    new Platform(context)
-  ];
+  const platformCollection = new PlatformCollection(context);
+  const platformCollectionPromise = platformCollection.init();
 
-  
-  const platformPromises = platforms
-  .map((platform, index) => {
-    platform.x = index * platform.width;
-    platform.y = 282;
-    return platform;
-  })
-  .map((platform) => platform.init());
-  
   const player = new Player(context);
   const playerPromise = player.init();
   player.y = 202;
 
-  const loop = new Loop(context, player, background, platforms);
+  const loop = new Loop(context, player, background, platformCollection);
 
-  Promise.all([backgroundPromise, ...platformPromises, playerPromise]).then(() => {
+  const gameObjectsPromises = [
+    backgroundPromise,
+    platformCollectionPromise,
+    playerPromise
+  ];
+  
+  Promise.all(gameObjectsPromises).then(() => {
     loop.render();
   });
 

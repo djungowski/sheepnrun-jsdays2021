@@ -12,5 +12,15 @@ class Gap {
     return Promise.resolve();
   }
 
-  render() {}
+  updatePosition(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  render() {
+    // Für Debugging
+    // this.context.beginPath();
+    // this.context.rect(this.x, this.y, this.width, this.height);
+    // this.context.stroke();
+  }
 }

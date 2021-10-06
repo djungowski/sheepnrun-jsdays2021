@@ -16,6 +16,11 @@ class Platform {
     });
   }
 
+  updatePosition(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
   render() {
     this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
   }
