@@ -22,7 +22,12 @@ class Player {
     this.width = this.sourceWidth / 3;
     this.jumpOffset = 55;
     this.lastUpdate = 0;
-    this.currentAnimationStep = 0;
+    this.currentAnimationStep = 0;    
+    this.isDead = false;
+  }
+
+  die() {
+    this.isDead = true;
   }
 
   init() {
