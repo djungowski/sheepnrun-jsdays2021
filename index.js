@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   player.y = 202;
 
   const loop = new Loop(context, player, background, platformCollection);
-
+  const keyboardHandler = new KeyboardHandler();
+  
   const gameObjectsPromises = [
     backgroundPromise,
     platformCollectionPromise,
@@ -25,9 +26,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   ];
   
   Promise.all(gameObjectsPromises).then(() => {
-    loop.render();
+    requestAnimationFrame(loop.step.bind(loop));
+    keyboardHandler.init(loop);
   });
 
-  requestAnimationFrame((timestamp) => loop.step(timestamp));
-    
 });

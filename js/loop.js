@@ -4,12 +4,19 @@ class Loop {
     this.player = player;
     this.background = background;
     this.plattformCollection = plattformCollection;
+    this.isMoving = false;
+  }
+
+  toggleMoving() {
+    this.isMoving = !this.isMoving;
   }
 
   // Welt aktualisieren
   update(timestamp) {
     this.player.update(timestamp);
-    this.plattformCollection.update(timestamp);
+    if (this.isMoving) {
+      this.plattformCollection.update(timestamp);
+    }
   }
 
   // Welt zeichnen
