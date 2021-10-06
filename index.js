@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   Promise.all(gameObjectsPromises).then(() => {
     requestAnimationFrame(loop.step.bind(loop));
-    keyboardHandler.init(loop);
+    keyboardHandler.init(loop, player);
   });
 
 });

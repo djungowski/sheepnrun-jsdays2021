@@ -8,6 +8,9 @@ class Loop {
   }
 
   toggleMoving() {
+    if (this.isMoving && this.player.currentState === Player.jump) {
+      return;
+    }
     this.isMoving = !this.isMoving;
     this.player.setIsMoving(this.isMoving);
   }
