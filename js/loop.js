@@ -7,7 +7,9 @@ class Loop {
   }
 
   // Welt aktualisieren
-  update(timestamp) {}
+  update(timestamp) {
+    this.player.update(timestamp);
+  }
 
   // Welt zeichnen
   render() {
