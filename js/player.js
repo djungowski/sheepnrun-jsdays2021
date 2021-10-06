@@ -13,6 +13,12 @@ class Player {
       [Player.dead]: { image: new Image(), steps: 1, updateEvery: 30 },
     };
 
+    this.audios = {
+      [Player.jump]: new Audio(),
+      [Player.dead]: new Audio(),
+    };
+
+
     this.currentState = Player.idle;
     this.isMoving = false;
 
@@ -32,6 +38,8 @@ class Player {
   }
 
   die() {
+    this.audios[Player.dead].currentTime = 0;
+    this.audios[Player.dead].play();
     this.currentState = Player.dead;
   }
 
@@ -53,11 +61,21 @@ class Player {
         this.animations[Player.dead].image.addEventListener('load', resolve);
         this.animations[Player.dead].image.src = 'assets/Black_Sheep_Dead.png';
       }),
+      new Promise((resolve) => {
+        this.audios[Player.dead].addEventListener('canplaythrough', resolve);
+        this.audios[Player.dead].src = 'audio/drop.wav';
+      }),
+      new Promise((resolve) => {
+        this.audios[Player.jump].addEventListener('canplaythrough', resolve);
+        this.audios[Player.jump].src = 'audio/jump3.wav';
+      }),
     ]);
   }
 
   jump() {
     if (this.currentState === Player.run) {
+      this.audios[Player.jump].currentTime = 0;
+      this.audios[Player.jump].play();
       this.currentState = Player.jump;
       this.y = this.y - this.jumpOffset;
       this.currentAnimationStep = 0;

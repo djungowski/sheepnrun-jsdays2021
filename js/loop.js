@@ -1,9 +1,10 @@
 class Loop {
-  constructor(context, player, background, platformCollection) {
+  constructor(context, player, background, platformCollection, musicPlayer) {
     this.context = context;
     this.player = player;
     this.background = background;
     this.platformCollection = platformCollection;
+    this.musicPlayer = musicPlayer;
     this.isMoving = false;
   }
 
@@ -16,6 +17,7 @@ class Loop {
     }
 
     this.isMoving = !this.isMoving;
+    this.musicPlayer.playMusic(this.isMoving);
     this.player.setIsMoving(this.isMoving);
   }
 
@@ -26,10 +28,10 @@ class Loop {
       this.platformCollection.update(timestamp);
     }
     if (!this.player.isDead && this.willPlayerDie()) {
+      this.musicPlayer.playMusic(false);
       this.toggleMoving();
       this.player.die();
     }
-
   }
 
   willPlayerDie() {

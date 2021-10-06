@@ -3,6 +3,7 @@ class Background {
     this.context = context;
 
     this.image = new Image();
+    
   }
 
   init(source) {

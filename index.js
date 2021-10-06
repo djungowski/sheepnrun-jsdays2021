@@ -16,13 +16,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   const playerPromise = player.init();
   player.y = 202;
 
-  const loop = new Loop(context, player, background, platformCollection);
+  const musicPlayer = new MusicPlayer();
+  const musicPlayerPromise = musicPlayer.init();
+
+  const loop = new Loop(
+    context,
+    player,
+    background,
+    platformCollection,
+    musicPlayer
+  );
   const keyboardHandler = new KeyboardHandler();
   
   const gameObjectsPromises = [
     backgroundPromise,
     platformCollectionPromise,
-    playerPromise
+    playerPromise,
+    musicPlayerPromise
   ];
   
   Promise.all(gameObjectsPromises).then(() => {
